@@ -1,0 +1,4 @@
+django
+mysqlclient
+gunicorn
+aiohttp==1.3.5

@@ -1,0 +1,32 @@
+version: '3.7'
+
+services:
+  nginx:
+    build: ./nginx
+    ports:
+      - "1300:80"
+    volumes:
+      - static_volume:/home/app/microservice/static
+    depends_on:
+      - web
+    restart: "on-failure"
+  web:
+    build: . #build the image for the web service from the dockerfile in parent directory
+    command: sh -c "gunicorn helloworld.wsgi:application --bind 0.0.0.0:8000"
+    volumes:
+      - .:/microservice:rw # map data and files from parent directory in host to microservice directory in docker containe
+      - static_volume:/home/app/microservice/static
+    image: helloworld
+
+    expose:
+      - "8000"
+    restart: "on-failure"
+
+    # expose:
+    #   - ${APP_PORT}
+    # restart: "on-failure"
+
+
+volumes:
+  postgres_data:
+  static_volume:

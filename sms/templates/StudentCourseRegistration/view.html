@@ -1,0 +1,75 @@
+{% extends "StudentCourseRegistration/base.html" %}
+{% block content %}
+<div class="container">
+
+    <div class="row mt-3">
+        <div class="col-md-11">
+            <h1>Student Course Registration</h1>
+        </div>
+        <div class="col-md-1">
+            <a class="btn btn-md btn-success" href="{% url 'create' %}">Create</a>
+        </div>
+    </div>
+    <div class="row">
+
+    <div class="col-md-12">
+        <table class="display responsive" id="datatable" style="width:100%">
+            <thead>
+                <th>ID</th>
+                <th>Student</th>
+                <th>Course</th>
+            </thead>
+            <tbody>
+            {% for student in objectList %}
+            <tr>
+                <td>{{ student.id }}</td>
+                <td>{{ student.name }}</td>
+                <td>{{ student.course }}</td>
+                <td>
+
+                    <a class="btn btn-primary" href="{% url 'update' student.id%}">
+                        Edit
+                    </a>
+                    <a class="btn btn-danger" data-target="#deleteModal{{student.id}}" data-toggle="modal" id="delete-btn" type="button">
+                        Delete
+                    </a>
+
+                </td>
+            </tr>
+            <div aria-hidden="true" aria-labelledby="deleteModal" class="modal fade" id="deleteModal{{student.id}}" role="dialog"
+                 tabindex="-1">
+                <div class="modal-dialog modal-dialog-centered" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" >Confirm Delete</h5>
+                            <button aria-label="Close" class="close" data-dismiss="modal" type="button">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            Are you sure you want to delete {{student}}?
+                        </div>
+                        <div class="modal-footer">
+                            <button class="btn btn-secondary" data-dismiss="modal" type="button">Cancel</button>
+                            <form action="{% url 'delete' student.id %}" method="POST">
+                                {% csrf_token %}
+                                <button class="btn btn-primary" class="btn" type='submit' value="Confirm">Delete</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<script>
+      $(document).ready(function() {
+          $('#datatable').DataTable();
+      });
+</script>
+
+</div>
+{% endblock content %}
