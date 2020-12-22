@@ -13,7 +13,7 @@ pipeline {
                   }
              }
              steps {
-                  sh 'virtualenv venv && . venv/bin/activate && pip install -r requirements.txt && python helloworld/sms/tests.py'
+                  sh 'virtualenv venv && . venv/bin/activate && pip install -r requirements.txt && python sms/tests.py'
              }
         }
         stage('Build Docker image') { 
