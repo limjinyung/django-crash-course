@@ -12,11 +12,9 @@ node {
 
             /* setting the environment PATH */    
             withEnv(["PATH=$PATH:~/.local/bin"]){
-                sh "bash test.sh"
+                sh 'docker-compose up -d --scale chrome=5 --scale firefox=0'
             }
 
-    		/* Start docker-compose with five instances of Chrome */
-    	    sh 'docker-compose up -d --scale chrome=5 --scale firefox=0'
           },
           "Build Image": {
             /* This builds an image with all pytest selenium scripts in it */
