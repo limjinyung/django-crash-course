@@ -1,21 +1,24 @@
-pipeline {
-    agent any
-    stages {
-        stage('Test') {
-             agent {
-                  docker {
-                       image 'qnib/pytest && python:3.6.1-alpine'
-                  }
-             }
-             steps {
-                  sh 'python3 --version'
-                  sh 'virtualenv venv && . venv/bin/activate && pip install -r requirements.txt && python sms/tests.py'
-             }
-        }
+ /* This pipeline creates a docker compose and then executes all the scripts. Note the Jenkins has to be in Linux environment */
+node {
+    stage('Clone repository') {
+        /* Clone repository */
+        checkout scm
     }
-    post {
-         always {
-              emailext body: 'A Test Email', recipientProviders: [[$class: 'DevelopersRecipientProvider'], [$class: 'RequesterRecipientProvider']], subject: 'Test'
-         }
-    }
+
+    stage('Docker Setup') {
+        parallel(
+          "Start Compose": {
+    		/* Start docker-compose with five instances of Chrome */
+    	    cmd_exec('docker-compose up -d --scale chrome=5 --scale firefox=0')
+          },
+          "Build Image": {
+            /* This builds an image with all pytest selenium scripts in it */
+    		def dockerfile = 'Dockerfile'
+            app = docker.build("pytest-with-src","-f ${dockerfile} ./")
+          }
+        )
+    }    
+
+
 }
+

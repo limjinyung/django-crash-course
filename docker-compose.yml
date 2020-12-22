@@ -1,43 +1,35 @@
-//variables
-def network='jenkins-${BUILD_NUMBER}'
-def seleniumHub='selenium-hub-${BUILD_NUMBER}'
-def chrome='chrome-${BUILD_NUMBER}'
-def firefox='firefox-${BUILD_NUMBER}'
-def containertest='conatinertest-${BUILD_NUMBER}'
-pipeline {
-  
-   agent { label 'docker' }
+version: "3.5"
+services:
+  selenium-hub:
+    image: selenium/hub
+    container_name: selenium-hub
+    ports:
+      - "4444:4444"
+    networks:
+      - selenium
 
-   stages{
-      stage('Setting Up Selenium Grid') {
-         steps{        
-            sh "docker network create ${network}"
-            sh "docker run -d -p 4444:4444 --name ${seleniumHub} --network ${network} selenium/hub"
-            sh "docker run -d -e HUB_PORT_4444_TCP_ADDR=${seleniumHub} -e HUB_PORT_4444_TCP_PORT=4444 --network ${network} --name ${chrome} selenium/node-chrome"
-            sh "docker run -d -e HUB_PORT_4444_TCP_ADDR=${seleniumHub} -e HUB_PORT_4444_TCP_PORT=4444 --network ${network} --name ${firefox} selenium/node-firefox"
-         }
-      }
-      stage('Run Test') {
-         steps{
-            parallel(
-               "search-module":{
-                  sh "docker run --rm -e SELENIUM_HUB=${seleniumHub} -e BROWSER=firefox -e MODULE=search-module.xml -v ${WORKSPACE}/search:/usr/share/tag/test-output --network ${network} iamsethi786/docker-selenium"
-                  archiveArtifacts artifacts: 'search/**', fingerprint: true
-               },
-               "order-module":{
-                  sh "docker run --rm -e SELENIUM_HUB=${seleniumHub} -e BROWSER=chrome -e MODULE=order-module.xml -v ${WORKSPACE}/order:/usr/share/tag/test-output  --network ${network} iamsethi786/docker-selenium"
-                  archiveArtifacts artifacts: 'order/**', fingerprint: true
-               }               
-            ) 
-         }
-      }
-    }
-    post{
-      always {
-         sh "docker rm -vf ${chrome}"
-         sh "docker rm -vf ${firefox}"
-         sh "docker rm -vf ${seleniumHub}"
-         sh "docker network rm ${network}"
-      }   
-   }
-}
+  chrome:
+    image: selenium/node-chrome
+    volumes:
+      - /dev/shm:/dev/shm
+    depends_on:
+      - selenium-hub
+    environment:
+      - HUB_HOST=selenium-hub
+      - HUB_PORT=4444
+    networks:
+      - selenium
+  firefox:
+    image: selenium/node-firefox
+    volumes:
+      - /dev/shm:/dev/shm
+    depends_on:
+      - selenium-hub
+    environment:
+      - HUB_HOST=selenium-hub
+      - HUB_PORT=4444
+    networks:
+      - selenium
+networks:
+  selenium:
+    name: selenium
