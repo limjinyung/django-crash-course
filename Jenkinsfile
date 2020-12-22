@@ -15,7 +15,7 @@ node {
           },
           "Build Image": {
             /* This builds an image with all pytest selenium scripts in it */
-    		def dockerfile = 'pytest.Dockerfile'
+    		def dockerfile = 'Dockerfile'
             app = docker.build("pytest-with-src","-f ${dockerfile} ./")
           }
         )
