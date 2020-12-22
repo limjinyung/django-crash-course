@@ -1,4 +1,4 @@
-FROM python:3
+FROM python:3.6
 ENV PYTHONBUFFERED=1
 WORKDIR /helloworld
 COPY requirements.txt /helloworld/
