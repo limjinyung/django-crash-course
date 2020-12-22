@@ -4,3 +4,6 @@ WORKDIR /helloworld
 COPY requirements.txt /helloworld/
 RUN pip install -r requirements.txt
 COPY . /helloworld/
+
+VOLUME /helloworld
+CMD ["python", "manage.py", "test", "--noinput"]

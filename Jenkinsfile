@@ -1,28 +1,28 @@
  /* This pipeline creates a docker compose and then executes all the scripts. Note the Jenkins has to be in Linux environment */
-node {
+pipeline {
 
     stage('Clone repository') {
         /* Clone repository */
         checkout scm
     }
 
-    stage('Docker Setup') {
-        parallel(
-          "Start Compose": {
+    stage('Build') {
+        steps {
+          sh "docker-compose build"
+        }
+    }
 
-            /* setting the environment PATH */    
-            withEnv(["PATH=$PATH:~/.local/bin"]){
-                sh 'docker-compose up -d --scale chrome=5 --scale firefox=0'
-            }
+    stage('Start Selenium') {
+      steps {
+        sh "docker-compose start selenium"
+      }
+    }
 
-          },
-          "Build Image": {
-            /* This builds an image with all pytest selenium scripts in it */
-    		def dockerfile = 'Dockerfile'
-            app = docker.build("pytest-with-src","-f ${dockerfile} ./")
-          }
-        )
-    }    
+    stage('Run Test') {
+      steps {
+        sh "docker-compose run django"
+      }
+    }
 
 
 }
