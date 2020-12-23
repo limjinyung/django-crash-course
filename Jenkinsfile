@@ -14,6 +14,11 @@ pipeline {
             sh "docker network create ${network}"
          }
       }
+      stage("Print ENV") {
+        steps {
+          sh 'printenv'
+        }
+      }
       stage('Install docker-compose') {
         steps {
           sh "rm /usr/local/bin/docker-compose"
