@@ -1,7 +1,8 @@
  /* This pipeline creates a docker compose and then executes all the scripts. Note the Jenkins has to be in Linux environment */
 pipeline {
 
-    stage('Clone repository') {
+  stages{
+     stage('Clone repository') {
         /* Clone repository */
         checkout scm
     }
@@ -29,7 +30,7 @@ pipeline {
         sh 'docker-compose stop selenium'
       }
     }
-
+  }
 
 }
 
