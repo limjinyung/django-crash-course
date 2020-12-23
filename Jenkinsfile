@@ -1,6 +1,8 @@
  /* This pipeline creates a docker compose and then executes all the scripts. Note the Jenkins has to be in Linux environment */
 pipeline {
 
+  agent any
+
   stages{
      stage('Clone repository') {
         /* Clone repository */
