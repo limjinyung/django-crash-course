@@ -17,8 +17,7 @@ pipeline {
       // }
       stage('Install docker-compose') {
         steps {
-          sh "curl -L https://github.com/docker/compose/releases/download/1.8.0/docker-compose-`uname -s`-`uname -m` \
-    >~/docker-compose && chmod +x ~/docker-compose && mv ~/docker-compose /usr/local/bin/docker-compose"
+          sh "sudo curl -L https://github.com/docker/compose/releases/download/1.8.0/docker-compose-`uname -s`-`uname -m` > /usr/local/bin/docker-compose"
         }
       }
       stage('Build') {
