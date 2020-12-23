@@ -10,11 +10,11 @@ pipeline {
             sh "docker network create ${network}"
          }
       }
-      // stage('Give permission') {
-      //   steps {
-      //     sh "docker exec -u root -it d2cadeec104d bin/bash && chown jenkins:docker /var/run/docker.sock"
-      //   }
-      // }
+      stage('Give permission') {
+        steps {
+          sh "docker exec -u root -it d2cadeec104d bin/bash"
+        }
+      }
       stage('Install docker-compose') {
         steps {
           sh "apt-get install python-pip && pip install docker-compose"
