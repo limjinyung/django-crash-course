@@ -10,19 +10,17 @@ pipeline {
             sh "docker network create ${network}"
          }
       }
-      stage("Reveal PATH") {
+      stage('Install docker-compose') {
         steps {
-          sh "printenv"
+          sh "rm /usr/local/bin/docker-compose"
+          sh "curl -fsSL get.docker.com -o get-docker.sh"
+          sh "sh get-docker.sh"
+          sh "curl -L https://github.com/docker/compose/releases/download/1.17.0/docker-compose-`uname -s`-`uname -m` -o /usr/local/bin/docker-compose && chmod +x /usr/local/bin/docker-compose"
+          sh "chmod +x /usr/local/bin/docker-compose"
         }
       }
-      // stage('Install docker-compose') {
-      //   steps {
-      //     sh "curl -L https://github.com/docker/compose/releases/download/1.17.0/docker-compose-`uname -s`-`uname -m` -o /usr/local/bin/docker-compose && chmod +x /usr/local/bin/docker-compose"
-      //   }
-      // }
       stage('Build') {
         steps {
-          sh "docker-composer build"
           sh "docker-compose build"
         }
       }
