@@ -24,6 +24,12 @@ node {
       }
     }
 
+    stage('Clearing') {
+      steps {
+        sh 'docker-compose stop selenium'
+      }
+    }
+
 
 }
 
