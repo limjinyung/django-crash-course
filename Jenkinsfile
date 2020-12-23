@@ -3,7 +3,7 @@ def network='jenkins-${BUILD_NUMBER}'
 pipeline {
 
   environment {
-    PATH = "$PATH:/Docker/Docker/resources/bin/docker-compose"
+    PATH = "$PATH:/docker-compose"
   }
   
    agent any
@@ -30,7 +30,8 @@ pipeline {
       // }
       stage('Build') {
         steps {
-          withEnv(["PATH=$PATH:/Docker/Docker/resources/bin/docker-compose"]){
+          withEnv(["PATH=$PATH:/docker-compose"]){
+            sh "docker-compose up -d"
             sh "docker-compose build"
           }
           // sh "docker-compose build"
