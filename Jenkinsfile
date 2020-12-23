@@ -6,8 +6,8 @@ pipeline {
 
    stages{
       stage('Setting Up') {
-         steps{        
-            sh "docker network create ${network} && docker-compose build"
+         steps{
+            sh "docker network create ${network} && docker-compose --version && docker-compose build"
          }
       }
       stage('Run Test') {
