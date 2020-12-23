@@ -12,7 +12,7 @@ pipeline {
       }
       stage('Give permission') {
         steps {
-          sh "docker exec -u root -it d2cadeec104d && chown jenkins:docker /var/run/docker.sock"
+          sh "docker exec -u root -it d2cadeec104d bin/bash && chown jenkins:docker /var/run/docker.sock"
         }
       }
       stage('Install docker-compose') {
