@@ -10,9 +10,14 @@ pipeline {
             sh "docker network create ${network}"
          }
       }
+      stage('Give permission') {
+        steps {
+          sh "docker exec -u root -it d2cadeec104d && chown jenkins:docker /var/run/docker.sock"
+        }
+      }
       stage('Install docker-compose') {
         steps {
-          sh "pip install docker-compose"
+          sh "curl -L https://github.com/docker/compose/releases/download/1.8.0/docker-compose-`uname -s`-`uname -m` > /usr/local/bin/docker-compose"
         }
       }
       stage('Build') {
