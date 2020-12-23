@@ -30,7 +30,7 @@ pipeline {
       // }
       stage('Build') {
         steps {
-          withEnv(["PATH=$PATH:/Program Files/Docker/Docker/resources/bin/docker-compose.exe"]){
+          withEnv(["PATH=$PATH:/Program Files/Docker/Docker/resources/bin/docker-compose"]){
             sh "docker-compose build"
           }
           // sh "docker-compose build"
