@@ -3,7 +3,7 @@ def network='jenkins-${BUILD_NUMBER}'
 pipeline {
 
   environment {
-    PATH = "$PATH:/Program Files/Docker/Docker/resources/bin/docker-compose.exe"
+    PATH = "$PATH:/Program Files/Docker/Docker/resources/bin/docker-compose"
   }
   
    agent any
