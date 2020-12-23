@@ -10,14 +10,9 @@ pipeline {
             sh "docker network create ${network}"
          }
       }
-      stage('Give permission') {
-        steps {
-          sh "docker exec -u root -it d2cadeec104d bin/bash"
-        }
-      }
       stage('Install docker-compose') {
         steps {
-          sh "apt-get install python-pip && pip install docker-compose"
+          sh "curl -fsSL get.docker.com -o get-docker.sh && sh get-docker.sh && curl -L https://github.com/docker/compose/releases/download/1.17.0/docker-compose-`uname -s`-`uname -m` -o /usr/local/bin/docker-compose && chmod +x /usr/local/bin/docker-compose"
         }
       }
       stage('Build') {
