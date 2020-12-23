@@ -12,8 +12,9 @@ pipeline {
       // }
       stage("Install doocker-compose") {
         steps{
-          sh "curl -L --fail https://github.com/docker/compose/releases/download/1.27.4/run.sh -o /usr/local/bin/docker-compose"
-          sh "chmod +x /usr/local/bin/docker-compose"
+          // sh "curl -L --fail https://github.com/docker/compose/releases/download/1.27.4/run.sh -o /usr/local/bin/docker-compose"
+          // sh "chmod +x /usr/local/bin/docker-compose"
+          sh "ln -s /usr/local/bin/docker-compose /usr/bin/docker-compose"
           sh "docker-compose --version"
         }
       }
